@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://4h5eban7nsg8"]
+
+[ext_resource type="Script" path="res://scenes/space.gd" id="1_c6rj5"]
+[ext_resource type="Texture2D" uid="uid://b3jl2wu7ax78c" path="res://assets/icon.svg" id="2_dtwn4"]
+
+[node name="space" type="Node2D"]
+script = ExtResource("1_c6rj5")
+
+[node name="sprite" type="Sprite2D" parent="."]
+self_modulate = Color(0, 0, 0, 1)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("2_dtwn4")
