@@ -1,0 +1,46 @@
+[gd_scene load_steps=3 format=3 uid="uid://cth0ewqr45kuw"]
+
+[ext_resource type="Script" uid="uid://dfcepqe544m25" path="res://scenes/title.gd" id="1_4ignj"]
+[ext_resource type="Texture2D" uid="uid://b3jl2wu7ax78c" path="res://assets/icon.svg" id="2_wosw1"]
+
+[node name="title" type="Control"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -640.0
+offset_top = -360.0
+offset_right = 640.0
+offset_bottom = 360.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_4ignj")
+
+[node name="image_title" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -64.0
+offset_right = 64.0
+offset_bottom = 128.0
+grow_horizontal = 2
+texture = ExtResource("2_wosw1")
+
+[node name="label_action" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -170.0
+offset_right = 20.0
+offset_bottom = -147.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 40
+text = "press any button"
