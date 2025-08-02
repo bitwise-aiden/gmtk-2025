@@ -60,7 +60,7 @@ func _ready() -> void:
 		var character : Character = SCENE_CHARACTER.instantiate()
 
 		var coord : Vector2i = __random_coord()
-		while __spaces[coord].occupied_by != "":
+		while __spaces[coord].occupied_by != null:
 			coord = __random_coord()
 
 		character.coord = coord
@@ -69,7 +69,7 @@ func _ready() -> void:
 		__parent_characters.add_child(character)
 		__characters[character_name] = character
 
-		__spaces[coord].occupied_by = character_name
+		__spaces[coord].occupied_by = character
 
 		_ignore = character.selected.connect(__character_was_selected.bind(character_name))
 
