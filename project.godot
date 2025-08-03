@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="gmtk-2025"
-run/main_scene="uid://dypid47lofo5o"
+run/main_scene="uid://cv24m25d1k0ja"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://assets/icon.svg"
 
@@ -64,9 +64,11 @@ shader_language/warnings/treat_warnings_as_errors=true
 
 [display]
 
-window/size/viewport_width=1280
-window/size/viewport_height=720
+window/size/viewport_width=352
+window/size/viewport_height=352
 window/size/resizable=false
+window/size/window_width_override=1408
+window/size/window_height_override=1408
 window/stretch/mode="canvas_items"
 
 [editor]
@@ -86,3 +88,4 @@ click={
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0
+environment/defaults/default_clear_color=Color(0, 0, 0, 1)

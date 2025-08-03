@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cth0ewqr45kuw"]
 
-[ext_resource type="Script" uid="uid://dfcepqe544m25" path="res://scenes/title.gd" id="1_4ignj"]
+[ext_resource type="Script" uid="uid://dfcepqe544m25" path="res://scenes/menus/title.gd" id="1_4ignj"]
 [ext_resource type="Texture2D" uid="uid://b3jl2wu7ax78c" path="res://assets/icon.svg" id="2_wosw1"]
 
 [node name="title" type="Control"]

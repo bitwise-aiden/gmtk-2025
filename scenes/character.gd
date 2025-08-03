@@ -1,4 +1,4 @@
-class_name Character extends Node2D
+class_name Character extends Entity
 
 
 # Public signals
@@ -8,15 +8,12 @@ signal selected()
 
 # Public variables
 
-var coord : Vector2i :
-	set(p_value):
-		coord = p_value
-		position = p_value * 64.0
-
 var code : String
 
 
 # Private variables
+
+@onready var __sprite : Sprite2D = $sprite
 
 @onready var __area : Area2D = $area
 var __mouse_over : bool
@@ -58,3 +55,39 @@ func move_up() -> void:
 
 func noop() -> void:
 	pass
+
+
+func set_offscreen() -> void:
+	__sprite.position.y = Constant.SPACE_OFFSCREEN_OFFSET
+
+
+func tween_in(
+	duration : float,
+	p_tween : Tween = create_tween(),
+) -> Tween:
+	set_offscreen()
+
+	var _i : Tweener = p_tween.tween_property(
+		__sprite,
+		"position:y",
+		0.0,
+		duration
+	).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO)
+
+	return p_tween
+
+
+func tween_out(
+	duration : float,
+	p_tween : Tween = create_tween(),
+) -> Tween:
+	__sprite.position.y = 0.0
+
+	var _i : Tweener = p_tween.tween_property(
+		__sprite,
+		"position:y",
+		Constant.SPACE_OFFSCREEN_OFFSET,
+		duration
+	).set_ease(Tween.EASE_OUT)
+
+	return p_tween

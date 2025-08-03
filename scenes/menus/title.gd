@@ -57,4 +57,4 @@ func _input(event: InputEvent) -> void:
 
 	await tween.finished
 
-	_ignore = get_tree().change_scene_to_file("res://scenes/level_select.tscn")
+	_ignore = get_tree().change_scene_to_file("res://scenes/menus/level_select.tscn")
