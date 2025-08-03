@@ -247,7 +247,7 @@ func level_screen_show() -> void:
 
 		__level_data.text = "instructions: %d (best %d)\nmoves: %d (best %d)" % [
 			instruction_count,
-			1,
+			1 + __current_level * 2,
 			__move_index + 1,
 			4
 		]
