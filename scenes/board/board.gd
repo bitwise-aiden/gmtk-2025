@@ -85,6 +85,7 @@ func set_space_type(
 ) -> void:
 	__spaces[coord].type = type
 	__spaces[coord].enabled = false
+	__spaces[coord].targets.clear()
 
 
 func tween_in(
