@@ -1,8 +1,14 @@
 class_name Level extends Node2D
 
+# Public signals
+
+signal complete_or_timeout(p_levels : Array[LevelData])
+
+
 # Private constants
 
 const __SCENE_CHARACTER : PackedScene = preload("res://scenes/character/character.tscn")
+const __LEVEL_DATA_URI : String = "https://raw.githubusercontent.com/bitwise-aiden/gmtk-2025/refs/heads/main/assets/level.data"
 
 
 # Private variables
@@ -18,6 +24,7 @@ var __elapsed : float
 var __move_index : int
 var __winning : bool
 var __home : bool
+var __can_start : bool
 
 @onready var __button_home : TextureButton = $ui/button_home
 @onready var __button_play : TextureButton = $ui/controls/button_play
@@ -48,6 +55,7 @@ var __current_level : int
 # Lifecycle methods
 
 func _ready() -> void:
+	get_levels()
 	var _ignore : Variant
 
 	__home = true
@@ -69,7 +77,7 @@ func _ready() -> void:
 func _process(
 	p_delta: float,
 ) -> void:
-	if __home && Input.is_anything_pressed():
+	if __home && __can_start && Input.is_anything_pressed():
 		__home = false
 		menu_sreen_hide()
 		load_level(0)
@@ -140,6 +148,48 @@ func home() -> void:
 	if !__winning:
 		await tween_out().finished
 	var _i : int = get_tree().reload_current_scene()
+
+
+func get_levels() -> void:
+	var _ignore : Variant
+
+	var requester : HTTPRequest = HTTPRequest.new()
+	add_child(requester)
+	print("Making request")
+
+	_ignore = requester.request_completed.connect(
+		func(
+			_p_result: int,
+			p_response_code: int,
+			_p_headers: PackedStringArray,
+			p_body: PackedByteArray
+		) -> void:
+			if p_response_code != 200:
+				complete_or_timeout.emit(__levels)
+
+			var levels : Array[LevelData]
+			var level_strings : PackedStringArray = p_body.get_string_from_utf8().replace("\n", "").split("~")
+
+			for level_string : String in level_strings:
+				print(level_string)
+				levels.append(LevelData.new(level_string))
+	)
+
+	var error : int = requester.request(__LEVEL_DATA_URI)
+	if error != OK:
+		print("Failed")
+		return
+
+	var tween : Tween = create_tween()
+	_ignore = tween.tween_interval(0.5)
+	_ignore = tween.tween_callback(
+		func() -> void:
+			print("timeout")
+			complete_or_timeout.emit(__levels)
+	)
+
+	__levels = await complete_or_timeout
+	requester.queue_free()
 
 
 func load_level(
@@ -262,6 +312,7 @@ func menu_sreen_hide() -> void:
 
 
 func menu_sreen_show() -> void:
+	__can_start = true
 	__menu_screen.visible = true
 
 
