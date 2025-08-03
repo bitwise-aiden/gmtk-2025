@@ -3,8 +3,6 @@ class_name Space extends Entity
 
 # Public signals
 
-signal activated(p_coord : Vector2i)
-signal deactivated(p_coord : Vector2i)
 signal spiked(p_character : Character)
 
 
@@ -38,7 +36,10 @@ var type : Type :
 		__update_texture()
 
 # none, spike, button, gate
-var occupied_by : Character
+var occupied_by : Character :
+	set(p_value):
+		occupied_by = p_value
+		__update_texture()
 
 # spike, button, gate, trapdoor
 var enabled : bool :
@@ -47,7 +48,7 @@ var enabled : bool :
 		__update_texture()
 
 # button
-var target : Vector2i
+var targets : Array[Space]
 
 
 # Private variables
@@ -89,7 +90,8 @@ func enter(
 
 	if type == Type.button:
 		enabled = true
-		activated.emit(target)
+		for target : Space in targets:
+			target.enabled = true
 
 
 func exit() -> void:
@@ -97,7 +99,8 @@ func exit() -> void:
 
 	if type == Type.button:
 		enabled = false
-		deactivated.emit(target)
+		for target : Space in targets:
+			target.enabled = true
 
 
 func tween_in(
@@ -140,7 +143,7 @@ func __update_texture() -> void:
 		Type.spike:
 			atlas_coord = __REGION_SPIKE[int(enabled)]
 		Type.button:
-			atlas_coord = __REGION_BUTTON[int(enabled)]
+			atlas_coord = __REGION_BUTTON[int(enabled && !occupied_by)]
 		Type.gate:
 			atlas_coord = __REGION_GATE[int(enabled)]
 		Type.trapdoor:

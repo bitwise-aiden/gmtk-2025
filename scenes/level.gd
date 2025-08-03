@@ -155,7 +155,6 @@ func get_levels() -> void:
 
 	var requester : HTTPRequest = HTTPRequest.new()
 	add_child(requester)
-	print("Making request")
 
 	_ignore = requester.request_completed.connect(
 		func(
@@ -171,7 +170,6 @@ func get_levels() -> void:
 			var level_strings : PackedStringArray = p_body.get_string_from_utf8().replace("\n", "").split("~")
 
 			for level_string : String in level_strings:
-				print(level_string)
 				levels.append(LevelData.new(level_string))
 
 			complete_or_timeout.emit(levels)
@@ -179,14 +177,12 @@ func get_levels() -> void:
 
 	var error : int = requester.request(__LEVEL_DATA_URI)
 	if error != OK:
-		print("Failed")
 		return
 
 	var tween : Tween = create_tween()
 	_ignore = tween.tween_interval(0.5)
 	_ignore = tween.tween_callback(
 		func() -> void:
-			print("timeout")
 			complete_or_timeout.emit(__levels)
 	)
 
