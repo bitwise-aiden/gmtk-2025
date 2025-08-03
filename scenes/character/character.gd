@@ -57,6 +57,8 @@ func _ready() -> void:
 func _process(
 	_p_delta: float,
 ) -> void:
+	__speech_bubble.visible = __mouse_over && __shadow.scale.y > 0.999
+
 	if !__mouse_over:
 		return
 
@@ -107,6 +109,10 @@ func fall(
 		TAU * 2.0,
 		1.0
 	).set_ease(Tween.EASE_IN)
+
+
+func move_count() -> int:
+	return __moves.size()
 
 
 func tween_in(
@@ -179,4 +185,3 @@ func __mouse_interacted(
 	p_over : bool,
 ) -> void:
 	__mouse_over = p_over
-	__speech_bubble.visible = p_over && __sprite.position.y < 0.001

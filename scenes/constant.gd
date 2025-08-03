@@ -10,6 +10,7 @@ const BOARD_OFFSET : int = -int(BOARD_SIZE / 2.0)
 const SPACE_OFFSCREEN_OFFSET : float = -350.0
 
 const LEVEL_MOVE_DURATION : float = 0.5
+const LEVEL_MOVE_MAX : int = 25
 
 
 #const LEVEL_TEMPLATE : Array[int] = [
