@@ -2,7 +2,7 @@ class_name Level extends Node2D
 
 # Private constants
 
-const __SCENE_CHARACTER : PackedScene = preload("res://scenes/character.tscn")
+const __SCENE_CHARACTER : PackedScene = preload("res://scenes/character/character.tscn")
 
 
 # Private variables
@@ -16,8 +16,23 @@ const __SCENE_CHARACTER : PackedScene = preload("res://scenes/character.tscn")
 # Lifecycle methods
 
 func _ready() -> void:
-	await __board.tween_out().finished
 	load_level(Constant.LEVEL_01)
+
+#
+#var elapsed : float
+#func _process(
+	#p_delta: float,
+#) -> void:
+	#elapsed += p_delta
+#
+	#if elapsed > 0.5:
+		#for space : Space in __board.__spaces.values():
+			#if space.type != Space.Type.floor:
+				#space.enabled = !space.enabled
+		#elapsed = 0.0
+#
+	#if Input.is_action_just_pressed("click"):
+		#load_level(Constant.LEVEL_01)
 
 
 # Public methods
@@ -25,6 +40,12 @@ func _ready() -> void:
 func load_level(
 	p_level : Array[int],
 ) -> void:
+	await tween_out().finished
+
+	for character : Character in __characters:
+		character.queue_free()
+	__characters.clear()
+
 	for x : int in Constant.BOARD_SIZE:
 		for y : int in Constant.BOARD_SIZE:
 			var coord : Vector2i = Vector2i(x, y)
@@ -43,7 +64,34 @@ func load_level(
 
 			__board.set_space_type(coord, type)
 
-	__characters[0].set_offscreen()
+	await tween_in().finished
 
-	await __board.tween_in().finished
-	await __characters[0].tween_in(0.5).finished
+
+func tween_in(
+	p_tween : Tween = create_tween(),
+) -> Tween:
+	var level_tween : Tween = create_tween()
+	var _ignore : Variant
+
+	_ignore = __board.tween_in(level_tween)
+	for character : Character in __characters:
+		_ignore = character.tween_in(0.5, level_tween)
+
+	_ignore = p_tween.tween_subtween(level_tween)
+
+	return p_tween
+
+
+func tween_out(
+	p_tween : Tween = create_tween(),
+) -> Tween:
+	var level_tween : Tween = create_tween()
+	var _ignore : Variant
+
+	for character : Character in __characters:
+		_ignore = character.tween_out(0.2, level_tween)
+	_ignore = __board.tween_out(level_tween)
+
+	_ignore = p_tween.tween_subtween(level_tween)
+
+	return p_tween
