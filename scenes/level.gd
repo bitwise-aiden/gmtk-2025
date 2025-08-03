@@ -49,7 +49,6 @@ var __current_level : int
 
 func _ready() -> void:
 	var _ignore : Variant
-	print(Constant.LEVEL_02)
 
 	__home = true
 
@@ -164,7 +163,6 @@ func load_level(
 
 	__current_level = p_level
 	if __current_level >= __levels.size():
-		print("You win!")
 		return
 
 	var level_data : Array[int] = __levels[__current_level].data
