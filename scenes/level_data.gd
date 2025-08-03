@@ -1,25 +1,23 @@
-class_name LevelData extends Label
+class_name LevelData extends RefCounted
 
 
-# Private constants
+# Public variables
 
-const __ELAPSED_TIME : float = 0.5
-
-# Private variables
-
-var __elapsed : float
-var __upper : bool
+var data : Array[int]
+var buttons : Dictionary[Vector2i, Array]
+var best_instruction : int
+var best_move : int
 
 
 # Lifecycle methods
 
-func _process(
-	p_delta: float,
+func _init(
+	p_level_string : String,
 ) -> void:
-	__elapsed += p_delta
+	var parts : PackedStringArray = p_level_string.split(";")
 
-	if __elapsed > __ELAPSED_TIME:
-		__elapsed -= __ELAPSED_TIME
+	for cel : String in parts[0].split(","):
+		data.append(int(cel))
 
-		text = text.to_upper() if __upper else text.to_lower()
-		__upper = !__upper
+	best_instruction = int(parts[2])
+	best_move = int(parts[3])

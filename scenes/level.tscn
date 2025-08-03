@@ -13,7 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://cyqgk41hu3pfq" path="res://assets/restart_spritesheet1.png" id="11_8iemx"]
 [ext_resource type="Texture2D" uid="uid://sa2c7oucgcja" path="res://assets/restart_spritesheet2.png" id="12_64w2a"]
 [ext_resource type="FontFile" uid="uid://bx17plpd1qvdk" path="res://assets/velopfont.ttf" id="13_64w2a"]
-[ext_resource type="Script" uid="uid://wohwukbd6lpt" path="res://scenes/level_data.gd" id="14_fpun6"]
+[ext_resource type="Script" uid="uid://wohwukbd6lpt" path="res://scenes/level_data_label.gd" id="14_fpun6"]
 
 [node name="level" type="Node2D"]
 script = ExtResource("1_w7c3h")

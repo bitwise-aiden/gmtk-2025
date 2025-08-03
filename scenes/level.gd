@@ -38,16 +38,18 @@ var __home : bool
 @onready var __menu_screen : Control = $ui/menu_screen
 
 
-var __levels : Array[Array] = [
-	Constant.LEVEL_01,
-	Constant.LEVEL_02,
+var __levels : Array[LevelData] = [
+	LevelData.new("2,2,2,2,2,2,2,2,2,2,2,2,0,0,0,0,0,0,0,0,0,2,2,0,0,0,1,1,1,0,0,0,2,2,0,0,0,1,6,1,0,0,0,2,2,0,0,0,1,1,1,0,7,0,2,2,0,0,0,1,1,1,0,0,0,2,2,0,0,0,1,1,1,0,0,0,2,2,0,0,0,1,7,1,0,0,0,2,2,0,0,0,1,1,1,0,0,0,2,2,0,0,0,0,0,0,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2;;1;4"),
+	LevelData.new("2,2,2,2,2,2,2,2,2,2,2,2,0,0,0,0,0,0,0,0,0,2,2,0,1,1,1,1,1,1,1,0,2,2,0,1,6,1,1,1,1,1,0,2,2,0,1,1,1,1,1,1,1,0,2,2,0,1,1,1,7,1,6,1,0,2,2,0,1,1,1,1,1,1,1,0,2,2,0,1,7,1,1,1,1,1,0,2,2,0,1,1,1,1,1,1,1,0,2,2,0,0,0,0,0,0,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2;;3;4")
 ]
 var __current_level : int
+
 
 # Lifecycle methods
 
 func _ready() -> void:
 	var _ignore : Variant
+	print(Constant.LEVEL_02)
 
 	__home = true
 
@@ -165,7 +167,7 @@ func load_level(
 		print("You win!")
 		return
 
-	var level_data : Array[int] = __levels[__current_level]
+	var level_data : Array[int] = __levels[__current_level].data
 
 	for x : int in Constant.BOARD_SIZE:
 		for y : int in Constant.BOARD_SIZE:
@@ -245,11 +247,11 @@ func level_screen_show() -> void:
 			__button_finish.visible = true
 			__button_next.visible = false
 
-		__level_data.text = "instructions: %d (best %d)\nmoves: %d (best %d)" % [
+		__level_data.text = "instructions: %d, best %d\nmoves: %d, best %d" % [
 			instruction_count,
-			1 + __current_level * 2,
+			__levels[__current_level].best_instruction,
 			__move_index + 1,
-			4
+			__levels[__current_level].best_move,
 		]
 	else:
 		__level_congrats.text = "Faaaail!"
