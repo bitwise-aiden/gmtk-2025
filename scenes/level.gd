@@ -173,6 +173,8 @@ func get_levels() -> void:
 			for level_string : String in level_strings:
 				print(level_string)
 				levels.append(LevelData.new(level_string))
+
+			complete_or_timeout.emit(levels)
 	)
 
 	var error : int = requester.request(__LEVEL_DATA_URI)
@@ -303,7 +305,7 @@ func level_screen_show() -> void:
 		]
 	else:
 		__level_congrats.text = "Faaaail!"
-		__level_data.text = "You reached max moves (25)\nwoomp woomp..."
+		__level_data.text = "You reached max 25 moves\nwoomp woomp..."
 		__button_next.visible = false
 
 
