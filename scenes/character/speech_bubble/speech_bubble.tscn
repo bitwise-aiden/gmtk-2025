@@ -1,0 +1,42 @@
+[gd_scene load_steps=6 format=3 uid="uid://d057l5s0phrpj"]
+
+[ext_resource type="Texture2D" uid="uid://b52icungemfpe" path="res://assets/lilbubz_spritesheet.png" id="1_e1pub"]
+[ext_resource type="Script" uid="uid://b238h16csrbfk" path="res://scenes/character/speech_bubble/speech_bubble.gd" id="1_prtts"]
+[ext_resource type="Script" uid="uid://cf5smcpdh87n7" path="res://scenes/character/speech_bubble/lil_bubz.gd" id="2_a8jen"]
+[ext_resource type="Texture2D" uid="uid://dkvxt35ktwabd" path="res://assets/speechbubv2.png" id="3_ba4x7"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lrhn5"]
+atlas = ExtResource("1_e1pub")
+region = Rect2(0, 0, 32, 32)
+
+[node name="speech_bubble" type="Node2D"]
+script = ExtResource("1_prtts")
+
+[node name="lil_bubz" type="Sprite2D" parent="."]
+texture = SubResource("AtlasTexture_lrhn5")
+offset = Vector2(0, -16)
+script = ExtResource("2_a8jen")
+
+[node name="bubble" type="NinePatchRect" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -24.0
+offset_top = -80.0
+offset_right = 24.0
+offset_bottom = -32.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("3_ba4x7")
+patch_margin_left = 16
+patch_margin_top = 16
+patch_margin_right = 32
+patch_margin_bottom = 32
+
+[node name="moves" type="GridContainer" parent="."]
+offset_top = -64.0
+offset_bottom = -64.0
+scale = Vector2(0.5, 0.5)
+columns = 5

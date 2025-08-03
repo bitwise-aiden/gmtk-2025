@@ -46,19 +46,20 @@ func set_space_type(
 func tween_in(
 	p_tween : Tween = create_tween()
 ) -> Tween:
+	var board_tween : Tween = create_tween().set_parallel()
 	var _ignore : Variant
-
-	_ignore = p_tween.set_parallel()
 
 	for space : Space in __spaces.values():
 		if space.type == Space.Type.wall:
 			continue
 
-		var subtween : Tween = create_tween()
-		_ignore = subtween.tween_interval(randf() * 0.3)
-		space.tween_in(0.5 + randf() * 0.2, subtween)
+		var space_tween : Tween = create_tween()
+		_ignore = space_tween.tween_interval(randf() * 0.3)
+		space.tween_in(0.5 + randf() * 0.2, space_tween)
 
-		_ignore = p_tween.tween_subtween(subtween)
+		_ignore = board_tween.tween_subtween(space_tween)
+
+	_ignore = p_tween.tween_subtween(board_tween)
 
 	return p_tween
 
@@ -66,18 +67,19 @@ func tween_in(
 func tween_out(
 	p_tween : Tween = create_tween()
 ) -> Tween:
+	var board_tween : Tween = create_tween().set_parallel()
 	var _ignore : Variant
-
-	_ignore = p_tween.set_parallel()
 
 	for space : Space in __spaces.values():
 		if space.type == Space.Type.wall:
 			continue
 
-		var subtween : Tween = create_tween()
-		_ignore = subtween.tween_interval(randf() * 0.3)
-		space.tween_out(0.5 + randf() * 0.2, subtween)
+		var space_tween : Tween = create_tween()
+		_ignore = space_tween.tween_interval(randf() * 0.3)
+		space.tween_out(0.5 + randf() * 0.2, space_tween)
 
-		_ignore = p_tween.tween_subtween(subtween)
+		_ignore = board_tween.tween_subtween(space_tween)
+
+	_ignore = p_tween.tween_subtween(board_tween)
 
 	return p_tween

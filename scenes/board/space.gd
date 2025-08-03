@@ -24,6 +24,9 @@ const __REGION_FLOOR_RATIOS : Array[Vector2i] = [
 	Vector2i(1, 1),
 ]
 const __REGION_WALL : Vector2i = Vector2i(0, 0)
+const __REGION_SPIKE : Array[Vector2i] = [Vector2i(4, 1), Vector2i(4, 0)]
+const __REGION_BUTTON : Array[Vector2i] = [Vector2i(0, 4), Vector2i(1, 4)]
+const __REGION_GATE : Array[Vector2i] = [Vector2i(2, 1), Vector2i(3, 1)]
 const __REGION_TRAPDOOR : Array[Vector2i] = [Vector2i(0, 2), Vector2i(2, 4)]
 
 
@@ -134,6 +137,12 @@ func __update_texture() -> void:
 			atlas_coord = __REGION_FLOOR_RATIOS.pick_random()
 		Type.wall:
 			atlas_coord = __REGION_WALL
+		Type.spike:
+			atlas_coord = __REGION_SPIKE[int(enabled)]
+		Type.button:
+			atlas_coord = __REGION_BUTTON[int(enabled)]
+		Type.gate:
+			atlas_coord = __REGION_GATE[int(enabled)]
 		Type.trapdoor:
 			atlas_coord = __REGION_TRAPDOOR[int(enabled)]
 		_:
