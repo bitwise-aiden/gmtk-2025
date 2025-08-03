@@ -29,7 +29,8 @@ var code : String
 
 # Private variables
 
-@onready var __sprite : AnimatedSprite2D = $animated_sprite
+@onready var __sprite : AnimatedSprite2D = $sprite
+@onready var __shadow : Sprite2D = $shadow
 
 @onready var __area : Area2D = $area
 var __mouse_over : bool
@@ -88,18 +89,52 @@ func direction(
 	return __MOVES_VECTOR[move]
 
 
+func fall(
+	p_tween : Tween = create_tween(),
+) -> void:
+	var _ignore : Tweener
+
+	_ignore = p_tween.tween_callback(func() -> void: __shadow.visible = false)
+	_ignore = p_tween.tween_property(
+		self,
+		"scale",
+		Vector2.ZERO,
+		1.0
+	)
+	_ignore = p_tween.tween_property(
+		self,
+		"rotation",
+		TAU * 2.0,
+		1.0
+	).set_ease(Tween.EASE_IN)
+
+
 func tween_in(
 	duration : float,
 	p_tween : Tween = create_tween(),
 ) -> Tween:
+	var _ignore : Tweener
 	__sprite.position.y = Constant.SPACE_OFFSCREEN_OFFSET
+	__shadow.scale = Vector2.ZERO
 
-	var _i : Tweener = p_tween.tween_property(
+	_ignore = p_tween.tween_property(
 		__sprite,
 		"position:y",
 		0.0,
 		duration
 	).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO)
+
+	var shadow_tween : Tween = create_tween()
+
+	_ignore = shadow_tween.tween_interval(duration * 0.5)
+	_ignore = shadow_tween.tween_property(
+		__shadow,
+		"scale",
+		Vector2.ONE,
+		duration * 0.5
+	).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO)
+
+	_ignore = p_tween.parallel().tween_subtween(shadow_tween)
 
 	return p_tween
 
@@ -108,13 +143,21 @@ func tween_out(
 	duration : float,
 	p_tween : Tween = create_tween(),
 ) -> Tween:
+	var _ignore : Tweener
 	__sprite.position.y = 0.0
+	__shadow.scale = Vector2.ONE
 
-	var _i : Tweener = p_tween.tween_property(
+	_ignore = p_tween.tween_property(
 		__sprite,
 		"position:y",
 		Constant.SPACE_OFFSCREEN_OFFSET,
 		duration
+	).set_ease(Tween.EASE_OUT)
+	_ignore = p_tween.parallel().tween_property(
+		__shadow,
+		"scale",
+		Vector2.ZERO,
+		duration * 0.5
 	).set_ease(Tween.EASE_OUT)
 
 	return p_tween
@@ -136,4 +179,4 @@ func __mouse_interacted(
 	p_over : bool,
 ) -> void:
 	__mouse_over = p_over
-	__speech_bubble.visible = p_over
+	__speech_bubble.visible = p_over && __sprite.position.y < 0.001

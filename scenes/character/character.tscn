@@ -1,7 +1,7 @@
 [gd_scene load_steps=38 format=3 uid="uid://byx2xua8i7t5p"]
 
 [ext_resource type="Script" uid="uid://7utl15bgxsci" path="res://scenes/character/character.gd" id="1_rkhd4"]
-[ext_resource type="Texture2D" uid="uid://bdysjoqalqbbe" path="res://assets/playertato1.png" id="2_rkhd4"]
+[ext_resource type="Texture2D" uid="uid://koqmvn0g01wo" path="res://assets/shadow_sprite.png" id="2_f8hpl"]
 [ext_resource type="PackedScene" uid="uid://d057l5s0phrpj" path="res://scenes/character/speech_bubble/speech_bubble.tscn" id="3_lrhn5"]
 [ext_resource type="Texture2D" uid="uid://gj8c200ke1mk" path="res://assets/playertato1_idle-sheet.png" id="4_f8hpl"]
 [ext_resource type="Texture2D" uid="uid://c8a2c713rgnyc" path="res://assets/playertato2-sheet.png" id="5_7ex5l"]
@@ -235,14 +235,13 @@ size = Vector2(32, 32)
 [node name="character" type="Node2D"]
 script = ExtResource("1_rkhd4")
 
-[node name="animated_sprite" type="AnimatedSprite2D" parent="."]
+[node name="shadow" type="Sprite2D" parent="."]
+texture = ExtResource("2_f8hpl")
+offset = Vector2(0, -11)
+
+[node name="sprite" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_7p6qn")
 animation = &"a"
-offset = Vector2(0, -16)
-
-[node name="sprite" type="Sprite2D" parent="."]
-visible = false
-texture = ExtResource("2_rkhd4")
 offset = Vector2(0, -16)
 
 [node name="area" type="Area2D" parent="."]
