@@ -17,6 +17,10 @@ const __MOVES_VECTOR : Array[Vector2i] = [
 	Vector2i.ZERO,
 ]
 
+# Private static
+
+static var id : int
+
 
 # Public variables
 
@@ -25,7 +29,7 @@ var code : String
 
 # Private variables
 
-@onready var __sprite : Sprite2D = $sprite
+@onready var __sprite : AnimatedSprite2D = $animated_sprite
 
 @onready var __area : Area2D = $area
 var __mouse_over : bool
@@ -43,6 +47,10 @@ func _ready() -> void:
 	_ignore = __area.mouse_exited.connect(__mouse_interacted.bind(false))
 
 	__speech_bubble.update_moves(__moves)
+
+	var animations : Array[String] = ["a", "b"]
+	__sprite.play(animations[id % 2])
+	id += 1
 
 
 func _process(
