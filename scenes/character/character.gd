@@ -9,6 +9,13 @@ enum Move { right = 0, down, left, up, none }
 # Private constants
 
 const __MOVES_MAX : int = 10
+const __MOVES_VECTOR : Array[Vector2i] = [
+	Vector2i.RIGHT,
+	Vector2i.DOWN,
+	Vector2i.LEFT,
+	Vector2i.UP,
+	Vector2i.ZERO,
+]
 
 
 # Public variables
@@ -62,24 +69,15 @@ func _process(
 
 # Public methods
 
-func move_down() -> void:
-	coord += Vector2i.DOWN
+func direction(
+	move_index : int,
+) -> Vector2i:
+	if __moves.is_empty():
+		return Vector2i.ZERO
 
+	var move : Move = __moves[move_index % __moves.size()]
 
-func move_left() -> void:
-	coord += Vector2i.LEFT
-
-
-func move_right() -> void:
-	coord += Vector2i.RIGHT
-
-
-func move_up() -> void:
-	coord += Vector2i.UP
-
-
-func noop() -> void:
-	pass
+	return __MOVES_VECTOR[move]
 
 
 func tween_in(

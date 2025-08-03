@@ -36,11 +36,55 @@ func _ready() -> void:
 
 # Public methods
 
+func can_enter(
+	p_coord : Vector2i,
+) -> bool:
+	return __spaces[p_coord].can_enter()
+
+
+func disable(
+	p_coord : Vector2i,
+) -> void:
+	__spaces[p_coord].enabled = false
+
+
+func enable(
+	p_coord : Vector2i,
+) -> void:
+	__spaces[p_coord].enabled = true
+
+
+func enter(
+	p_coord : Vector2i,
+	p_character : Character,
+) -> void:
+	__spaces[p_coord].enter(p_character)
+
+
+func exit(
+	p_coord: Vector2i,
+) -> void:
+	__spaces[p_coord].exit()
+
+
+func get_occupied(
+	p_coord : Vector2i,
+) -> Character:
+	return __spaces[p_coord].occupied_by
+
+
+func is_occupied(
+	p_coord : Vector2i,
+) -> bool:
+	return __spaces[p_coord].occupied_by != null
+
+
 func set_space_type(
 	coord : Vector2i,
 	type : Space.Type,
 ) -> void:
 	__spaces[coord].type = type
+	__spaces[coord].enabled = false
 
 
 func tween_in(
