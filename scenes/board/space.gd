@@ -24,7 +24,7 @@ const __REGION_FLOOR_RATIOS : Array[Vector2i] = [
 const __REGION_WALL : Vector2i = Vector2i(0, 0)
 const __REGION_SPIKE : Array[Vector2i] = [Vector2i(4, 1), Vector2i(4, 0)]
 const __REGION_BUTTON : Array[Vector2i] = [Vector2i(0, 4), Vector2i(1, 4)]
-const __REGION_GATE : Array[Vector2i] = [Vector2i(2, 1), Vector2i(3, 1)]
+const __REGION_GATE : Array[Vector2i] = [Vector2i(3, 1), Vector2i(2, 1)]
 const __REGION_TRAPDOOR : Array[Vector2i] = [Vector2i(0, 2), Vector2i(2, 4)]
 
 
@@ -48,7 +48,7 @@ var enabled : bool :
 		__update_texture()
 
 # button
-var targets : Array[Space]
+var targets : Array
 
 var level_id : int :
 	set(p_value):
@@ -79,7 +79,7 @@ func can_enter() -> bool:
 	if occupied_by != null:
 		return false
 
-	if type == Type.gate && enabled:
+	if type == Type.gate && !enabled:
 		return false
 
 	return true
@@ -105,7 +105,7 @@ func exit() -> void:
 	if type == Type.button:
 		enabled = false
 		for target : Space in targets:
-			target.enabled = true
+			target.enabled = false
 
 
 func tween_in(
@@ -149,9 +149,9 @@ func __update_texture() -> void:
 		Type.spike:
 			atlas_coord = __REGION_SPIKE[int(enabled)]
 		Type.button:
-			atlas_coord = __REGION_BUTTON[int(enabled && !occupied_by)]
+			atlas_coord = __REGION_BUTTON[int(enabled)]
 		Type.gate:
-			atlas_coord = __REGION_GATE[int(enabled)]
+			atlas_coord = __REGION_GATE[int(enabled || occupied_by)]
 		Type.trapdoor:
 			atlas_coord = __REGION_TRAPDOOR[int(enabled)]
 		_:

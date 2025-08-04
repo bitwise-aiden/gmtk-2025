@@ -8,7 +8,7 @@ signal complete_or_timeout(p_levels : Array[LevelData])
 # Private constants
 
 const __SCENE_CHARACTER : PackedScene = preload("res://scenes/character/character.tscn")
-const __LEVEL_DATA_URI : String = "https://raw.githubusercontent.com/bitwise-aiden/gmtk-2025/refs/heads/main/assets/level.data"
+const __LEVEL_DATA_URI : String = "https://raw.githubusercontent.com/bitwise-aiden/gmtk-2025/refs/heads/main/assets/level-with-buttons.data"
 
 
 # Private variables
@@ -80,7 +80,7 @@ func _process(
 	if __home && __can_start && Input.is_anything_pressed():
 		__home = false
 		menu_sreen_hide()
-		load_level(0)
+		load_level(3)
 
 	if !__playing:
 		return
@@ -243,6 +243,9 @@ func load_level(
 
 			__board.set_space_type(coord, type, __current_level)
 
+	var buttons : Dictionary[Vector2i, Array] = __levels[__current_level].buttons
+	for trigger_coord : Vector2i in buttons:
+		__board.set_trigger(trigger_coord, buttons[trigger_coord])
 
 	__move_index = 0
 

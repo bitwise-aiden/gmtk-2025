@@ -19,13 +19,13 @@ func _init(
 	for cel : String in parts[0].split(","):
 		data.append(int(cel))
 
-	for trigger_data : String in parts[1].split("/"):
-		var trigger_parts : PackedStringArray = trigger_data.split(":")
+	for trigger_data : String in parts[1].split("/", false):
+		var trigger_parts : PackedStringArray = trigger_data.split(":", false)
 
 		var trigger_coord : Vector2i = __parse_coord(trigger_parts[0])
 		buttons[trigger_coord] = []
 
-		for target_data : String in trigger_parts[1].split("|"):
+		for target_data : String in trigger_parts[1].split("|", false):
 			buttons[trigger_coord].append(__parse_coord(target_data))
 
 	best_instruction = int(parts[2])

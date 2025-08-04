@@ -90,6 +90,14 @@ func set_space_type(
 	__spaces[p_coord].level_id = p_level_id
 
 
+func set_trigger(
+	p_trigger : Vector2i,
+	p_targets : Array,
+) -> void:
+	var trigger : Space = __spaces[p_trigger]
+	trigger.targets = p_targets.map(func(p_coord : Vector2i) -> Space: return __spaces[p_coord])
+
+
 func tween_in(
 	p_tween : Tween = create_tween()
 ) -> Tween:
