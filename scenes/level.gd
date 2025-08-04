@@ -91,6 +91,11 @@ func _process(
 		__elapsed -= Constant.LEVEL_MOVE_DURATION
 
 		for character : Character in __characters:
+			character.move_show(__move_index)
+
+		await get_tree().create_timer(0.2).timeout
+
+		for character : Character in __characters:
 			var direction : Vector2i = character.direction(__move_index)
 			var prev : Vector2i = character.coord
 			var next : Vector2i = prev + direction
@@ -99,6 +104,8 @@ func _process(
 				__board.exit(prev)
 				__board.enter(next, character)
 				character.coord = next
+
+			character.move_hide()
 
 		var all : bool = true
 
@@ -234,7 +241,8 @@ func load_level(
 				Space.Type.trapdoor:
 					__targets.append(coord)
 
-			__board.set_space_type(coord, type)
+			__board.set_space_type(coord, type, __current_level)
+
 
 	__move_index = 0
 

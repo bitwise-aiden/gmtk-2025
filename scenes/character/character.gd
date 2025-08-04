@@ -31,6 +31,7 @@ var code : String
 
 @onready var __sprite : AnimatedSprite2D = $sprite
 @onready var __shadow : Sprite2D = $shadow
+@onready var __action : Sprite2D = $action
 
 @onready var __area : Area2D = $area
 var __mouse_over : bool
@@ -43,6 +44,8 @@ var __moves : Array[Move]
 
 func _ready() -> void:
 	var _ignore : int
+
+	__action.texture = __action.texture.duplicate()
 
 	_ignore = __area.mouse_entered.connect(__mouse_interacted.bind(true))
 	_ignore = __area.mouse_exited.connect(__mouse_interacted.bind(false))
@@ -114,6 +117,21 @@ func fall(
 func move_count() -> int:
 	return __moves.size()
 
+
+func move_hide() -> void:
+	__action.visible = false
+
+
+func move_show(
+	p_move_index : int,
+) -> void:
+	var move : Move = Move.none
+
+	if !__moves.is_empty():
+		move = __moves[p_move_index % __moves.size()]
+
+	__action.visible = true
+	(__action.texture as AtlasTexture).region.position.x = move * Constant.BOARD_SCALE
 
 func tween_in(
 	duration : float,

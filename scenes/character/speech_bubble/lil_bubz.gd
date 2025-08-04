@@ -3,7 +3,7 @@ class_name LilBubz extends Sprite2D
 
 # Private constants
 
-const __FRAME_DURATION : float = 0.1
+const __FRAME_DURATION : float = 0.2
 const __FRAME_MAX : int = 8
 
 

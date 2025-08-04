@@ -13,8 +13,9 @@ region = Rect2(0, 0, 32, 32)
 script = ExtResource("1_prtts")
 
 [node name="lil_bubz" type="Sprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
 texture = SubResource("AtlasTexture_lrhn5")
-offset = Vector2(0, -16)
+offset = Vector2(0, -20)
 script = ExtResource("2_a8jen")
 
 [node name="bubble" type="NinePatchRect" parent="."]

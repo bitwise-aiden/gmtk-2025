@@ -50,6 +50,11 @@ var enabled : bool :
 # button
 var targets : Array[Space]
 
+var level_id : int :
+	set(p_value):
+		level_id = p_value
+		__update_texture()
+
 
 # Private variables
 
@@ -137,6 +142,7 @@ func __update_texture() -> void:
 	var atlas_coord : Vector2i
 	match type:
 		Type.floor:
+			seed(hash(coord) ^ level_id)
 			atlas_coord = __REGION_FLOOR_RATIOS.pick_random()
 		Type.wall:
 			atlas_coord = __REGION_WALL

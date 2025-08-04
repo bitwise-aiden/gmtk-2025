@@ -1,10 +1,11 @@
-[gd_scene load_steps=38 format=3 uid="uid://byx2xua8i7t5p"]
+[gd_scene load_steps=40 format=3 uid="uid://byx2xua8i7t5p"]
 
 [ext_resource type="Script" uid="uid://7utl15bgxsci" path="res://scenes/character/character.gd" id="1_rkhd4"]
 [ext_resource type="Texture2D" uid="uid://koqmvn0g01wo" path="res://assets/shadow_sprite.png" id="2_f8hpl"]
 [ext_resource type="PackedScene" uid="uid://d057l5s0phrpj" path="res://scenes/character/speech_bubble/speech_bubble.tscn" id="3_lrhn5"]
 [ext_resource type="Texture2D" uid="uid://gj8c200ke1mk" path="res://assets/playertato1_idle-sheet.png" id="4_f8hpl"]
 [ext_resource type="Texture2D" uid="uid://c8a2c713rgnyc" path="res://assets/playertato2-sheet.png" id="5_7ex5l"]
+[ext_resource type="Texture2D" uid="uid://do4uyo38u2877" path="res://assets/arrows_spritesheet_dot.png" id="5_bix7t"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_bix7t"]
 atlas = ExtResource("4_f8hpl")
@@ -229,6 +230,10 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_7p6qn"]
+atlas = ExtResource("5_bix7t")
+region = Rect2(0, 0, 32, 32)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pjt0s"]
 size = Vector2(32, 32)
 
@@ -243,6 +248,12 @@ offset = Vector2(0, -11)
 sprite_frames = SubResource("SpriteFrames_7p6qn")
 animation = &"a"
 offset = Vector2(0, -16)
+
+[node name="action" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(0, -40)
+scale = Vector2(0.5, 0.5)
+texture = SubResource("AtlasTexture_7p6qn")
 
 [node name="area" type="Area2D" parent="."]
 

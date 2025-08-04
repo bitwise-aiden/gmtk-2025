@@ -49,7 +49,7 @@ func update_moves(
 	var rows : int = max(1, ceil(p_moves.size() / 5.0))
 
 	var half_height : float = rows * -8.0 - (rows - 1)
-	__moves.position.y = -70 + half_height
+	__moves.position.y = -44 + half_height
 
-	__bubble.position.y = -70 + half_height - 16.0
+	__bubble.position.y = -44 + half_height - 16.0
 	__bubble.size.y = half_height * -2.0 + 32.0

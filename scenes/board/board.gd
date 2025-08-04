@@ -80,12 +80,14 @@ func is_occupied(
 
 
 func set_space_type(
-	coord : Vector2i,
-	type : Space.Type,
+	p_coord : Vector2i,
+	p_type : Space.Type,
+	p_level_id : int,
 ) -> void:
-	__spaces[coord].type = type
-	__spaces[coord].enabled = false
-	__spaces[coord].targets.clear()
+	__spaces[p_coord].type = p_type
+	__spaces[p_coord].enabled = false
+	__spaces[p_coord].targets.clear()
+	__spaces[p_coord].level_id = p_level_id
 
 
 func tween_in(
