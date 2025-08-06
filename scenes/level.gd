@@ -1,14 +1,9 @@
 class_name Level extends Node2D
 
-# Public signals
-
-signal complete_or_timeout(p_levels : Array[LevelData])
-
-
 # Private constants
 
 const __SCENE_CHARACTER : PackedScene = preload("res://scenes/character/character.tscn")
-const __LEVEL_DATA_URI : String = "https://raw.githubusercontent.com/bitwise-aiden/gmtk-2025/refs/heads/main/assets/level-with-buttons.data"
+const __LEVEL_DATA_PATH : String = "res://assets/level-with-buttons.data"
 
 
 # Private variables
@@ -55,7 +50,7 @@ var __current_level : int
 # Lifecycle methods
 
 func _ready() -> void:
-	get_levels()
+	__levels = get_levels()
 	var _ignore : Variant
 
 	__home = true
@@ -80,7 +75,7 @@ func _process(
 	if __home && __can_start && Input.is_anything_pressed():
 		__home = false
 		menu_sreen_hide()
-		load_level(3)
+		load_level(0)
 
 	if !__playing:
 		return
@@ -157,44 +152,19 @@ func home() -> void:
 	var _i : int = get_tree().reload_current_scene()
 
 
-func get_levels() -> void:
+func get_levels() -> Array[LevelData]:
 	var _ignore : Variant
 
-	var requester : HTTPRequest = HTTPRequest.new()
-	add_child(requester)
+	var file : FileAccess = FileAccess.open(__LEVEL_DATA_PATH, FileAccess.READ)
+	var content : String = file.get_as_text()
 
-	_ignore = requester.request_completed.connect(
-		func(
-			_p_result: int,
-			p_response_code: int,
-			_p_headers: PackedStringArray,
-			p_body: PackedByteArray
-		) -> void:
-			if p_response_code != 200:
-				complete_or_timeout.emit(__levels)
+	var levels : Array[LevelData]
+	var level_strings : PackedStringArray = content.replace("\n", "").split("~")
 
-			var levels : Array[LevelData]
-			var level_strings : PackedStringArray = p_body.get_string_from_utf8().replace("\n", "").split("~")
+	for level_string : String in level_strings:
+		levels.append(LevelData.new(level_string))
 
-			for level_string : String in level_strings:
-				levels.append(LevelData.new(level_string))
-
-			complete_or_timeout.emit(levels)
-	)
-
-	var error : int = requester.request(__LEVEL_DATA_URI)
-	if error != OK:
-		return
-
-	var tween : Tween = create_tween()
-	_ignore = tween.tween_interval(0.5)
-	_ignore = tween.tween_callback(
-		func() -> void:
-			complete_or_timeout.emit(__levels)
-	)
-
-	__levels = await complete_or_timeout
-	requester.queue_free()
+	return levels
 
 
 func load_level(
