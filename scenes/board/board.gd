@@ -10,11 +10,14 @@ const __SCENE_SPACE : PackedScene = preload("res://scenes/board/space.tscn")
 
 @onready var __parent_spaces : Node = $parent_spaces
 var __spaces : Dictionary[Vector2i, Space]
+var __spaces_activated : Dictionary[Vector2i, bool]
+var __spaces_deactivated : Dictionary[Vector2i, bool]
 
 
 # Lifecycle methods
 
 func _ready() -> void:
+	var _ignore : int
 	var last_index : int = Constant.BOARD_SIZE - 1
 
 	for x : int in Constant.BOARD_SIZE:
@@ -33,8 +36,26 @@ func _ready() -> void:
 				_:
 					space.type = Space.Type.floor
 
+			_ignore = space.activated.connect(__space_activated)
+			_ignore = space.deactivated.connect(__space_deactivated)
+
 
 # Public methods
+
+func activation_apply() -> void:
+	var to_activate : Array[Vector2i] = __spaces_activated.keys().filter(func(coord : Vector2i) -> bool: return !__spaces_deactivated.has(coord))
+	var to_deactivate : Array[Vector2i] = __spaces_deactivated.keys().filter(func(coord : Vector2i) -> bool: return !__spaces_activated.has(coord))
+
+	for coord : Vector2i in to_activate:
+		__spaces[coord].enabled = true
+
+	for coord : Vector2i in to_deactivate:
+		__spaces[coord].enabled = false
+
+
+func activation_reset() -> void:
+	__spaces_activated.clear()
+	__spaces_deactivated.clear()
 
 func can_enter(
 	p_coord : Vector2i,
@@ -79,6 +100,12 @@ func is_occupied(
 	return __spaces[p_coord].occupied_by != null
 
 
+func set_inverted(
+	p_coord : Vector2i,
+) -> void:
+	__spaces[p_coord].inverted = true
+
+
 func set_space_type(
 	p_coord : Vector2i,
 	p_type : Space.Type,
@@ -86,6 +113,7 @@ func set_space_type(
 ) -> void:
 	__spaces[p_coord].type = p_type
 	__spaces[p_coord].enabled = false
+	__spaces[p_coord].inverted = false
 	__spaces[p_coord].targets.clear()
 	__spaces[p_coord].level_id = p_level_id
 
@@ -138,3 +166,19 @@ func tween_out(
 	_ignore = p_tween.tween_subtween(board_tween)
 
 	return p_tween
+
+
+# Private methods
+
+func __space_activated(
+	p_targets : Array,
+) -> void:
+	for target : Space in p_targets:
+		__spaces_activated[target.coord] = true
+
+
+func __space_deactivated(
+	p_targets : Array,
+) -> void:
+	for target : Space in p_targets:
+		__spaces_deactivated[target.coord] = false

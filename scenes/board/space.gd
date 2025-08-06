@@ -3,12 +3,14 @@ class_name Space extends Entity
 
 # Public signals
 
+signal activated(p_targets : Array)
+signal deactivated(p_targets : Array)
 signal spiked(p_character : Character)
 
 
 # Public enums
 
-enum Type { none = 0, floor, wall, spike, button, gate, trapdoor, character }
+enum Type { none = 0, floor, wall, spike, button, gate, trapdoor, character, enemy }
 
 
 # Private constants
@@ -23,7 +25,8 @@ const __REGION_FLOOR_RATIOS : Array[Vector2i] = [
 ]
 const __REGION_WALL : Vector2i = Vector2i(0, 0)
 const __REGION_SPIKE : Array[Vector2i] = [Vector2i(4, 1), Vector2i(4, 0)]
-const __REGION_BUTTON : Array[Vector2i] = [Vector2i(0, 4), Vector2i(1, 4)]
+const __REGION_BUTTON_ACTIVATE : Array[Vector2i] = [Vector2i(0, 5), Vector2i(1, 5)]
+const __REGION_BUTTON_DEACTIVATE : Array[Vector2i] = [Vector2i(0, 4), Vector2i(1, 4)]
 const __REGION_GATE : Array[Vector2i] = [Vector2i(3, 1), Vector2i(2, 1)]
 const __REGION_TRAPDOOR : Array[Vector2i] = [Vector2i(0, 2), Vector2i(2, 4)]
 
@@ -45,6 +48,12 @@ var occupied_by : Character :
 var enabled : bool :
 	set(p_value):
 		enabled = p_value
+		__update_texture()
+
+# button
+var inverted : bool :
+	set(p_value):
+		inverted = p_value
 		__update_texture()
 
 # button
@@ -95,8 +104,10 @@ func enter(
 
 	if type == Type.button:
 		enabled = true
-		for target : Space in targets:
-			target.enabled = true
+		if inverted:
+			deactivated.emit(targets)
+		else:
+			activated.emit(targets)
 
 
 func exit() -> void:
@@ -104,8 +115,10 @@ func exit() -> void:
 
 	if type == Type.button:
 		enabled = false
-		for target : Space in targets:
-			target.enabled = false
+		if inverted:
+			activated.emit(targets)
+		else:
+			deactivated.emit(targets)
 
 
 func tween_in(
@@ -149,7 +162,11 @@ func __update_texture() -> void:
 		Type.spike:
 			atlas_coord = __REGION_SPIKE[int(enabled)]
 		Type.button:
-			atlas_coord = __REGION_BUTTON[int(enabled)]
+			if inverted:
+				atlas_coord = __REGION_BUTTON_DEACTIVATE[int(enabled)]
+			else:
+				atlas_coord = __REGION_BUTTON_ACTIVATE[int(enabled)]
+
 		Type.gate:
 			atlas_coord = __REGION_GATE[int(enabled || occupied_by)]
 		Type.trapdoor:

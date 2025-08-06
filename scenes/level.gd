@@ -40,10 +40,7 @@ var __can_start : bool
 @onready var __menu_screen : Control = $ui/menu_screen
 
 
-var __levels : Array[LevelData] = [
-	LevelData.new("2,2,2,2,2,2,2,2,2,2,2,2,0,0,0,0,0,0,0,0,0,2,2,0,0,0,1,1,1,0,0,0,2,2,0,0,0,1,6,1,0,0,0,2,2,0,0,0,1,1,1,0,7,0,2,2,0,0,0,1,1,1,0,0,0,2,2,0,0,0,1,1,1,0,0,0,2,2,0,0,0,1,7,1,0,0,0,2,2,0,0,0,1,1,1,0,0,0,2,2,0,0,0,0,0,0,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2;;1;4"),
-	LevelData.new("2,2,2,2,2,2,2,2,2,2,2,2,0,0,0,0,0,0,0,0,0,2,2,0,1,1,1,1,1,1,1,0,2,2,0,1,6,1,1,1,1,1,0,2,2,0,1,1,1,1,1,1,1,0,2,2,0,1,1,1,7,1,6,1,0,2,2,0,1,1,1,1,1,1,1,0,2,2,0,1,7,1,1,1,1,1,0,2,2,0,1,1,1,1,1,1,1,0,2,2,0,0,0,0,0,0,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2;;3;4")
-]
+var __levels : Array[LevelData] = []
 var __current_level : int
 
 
@@ -75,7 +72,7 @@ func _process(
 	if __home && __can_start && Input.is_anything_pressed():
 		__home = false
 		menu_sreen_hide()
-		load_level(0)
+		load_level(4)
 
 	if !__playing:
 		return
@@ -90,6 +87,8 @@ func _process(
 
 		await get_tree().create_timer(0.2).timeout
 
+		__board.activation_reset()
+
 		for character : Character in __characters:
 			var direction : Vector2i = character.direction(__move_index)
 			var prev : Vector2i = character.coord
@@ -101,6 +100,8 @@ func _process(
 				character.coord = next
 
 			character.move_hide()
+
+		__board.activation_apply()
 
 		var all : bool = true
 
@@ -190,14 +191,14 @@ func load_level(
 	if __current_level >= __levels.size():
 		return
 
-	var level_data : Array[int] = __levels[__current_level].data
+	var level_data : Array[Space.Type] = __levels[__current_level].data
 
 	for x : int in Constant.BOARD_SIZE:
 		for y : int in Constant.BOARD_SIZE:
 			var coord : Vector2i = Vector2i(x, y)
 
 			var index : int = y * Constant.BOARD_SIZE + x
-			var type : Space.Type = level_data[index] as Space.Type
+			var type : Space.Type = level_data[index]
 
 			match type:
 				Space.Type.character:
@@ -216,6 +217,9 @@ func load_level(
 	var buttons : Dictionary[Vector2i, Array] = __levels[__current_level].buttons
 	for trigger_coord : Vector2i in buttons:
 		__board.set_trigger(trigger_coord, buttons[trigger_coord])
+
+	for inverted_coord : Vector2i in __levels[__current_level].inverted:
+		__board.set_inverted(inverted_coord)
 
 	__move_index = 0
 
