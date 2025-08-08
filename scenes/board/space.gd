@@ -115,10 +115,10 @@ func exit() -> void:
 
 	if type == Type.button:
 		enabled = false
-		if inverted:
-			activated.emit(targets)
-		else:
-			deactivated.emit(targets)
+		#if inverted:
+			#activated.emit(targets)
+		#else:
+			#deactivated.emit(targets)
 
 
 func tween_in(

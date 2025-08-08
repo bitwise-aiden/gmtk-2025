@@ -3,8 +3,9 @@ class_name LevelData extends RefCounted
 
 # Public variables
 
-var data : Array[Space.Type]
+var board : Array[Space.Type]
 var buttons : Dictionary[Vector2i, Array]
+var moves : Dictionary[Vector2i, Array]
 var inverted : Array[Vector2i]
 var best_instruction : int
 var best_move : int
@@ -18,13 +19,12 @@ func _init(
 	var parts : PackedStringArray = p_level_string.split(";")
 
 	for cel : String in parts[0].split(","):
-		data.append(int(cel) as Space.Type)
+		board.append(int(cel) as Space.Type)
 
 	for trigger_data : String in parts[1].split("/", false):
 		var trigger_parts : PackedStringArray = trigger_data.split(":", false)
 
 		var trigger_coord : Vector2i = __parse_coord(trigger_parts[0])
-		buttons[trigger_coord] = []
 
 		match __get_cel_type(trigger_coord):
 			Space.Type.button:
@@ -36,8 +36,16 @@ func _init(
 
 				button_data.remove_at(0)
 
+				buttons[trigger_coord] = []
 				for target_data : String in button_data:
 					buttons[trigger_coord].append(__parse_coord(target_data))
+			Space.Type.character:
+				var character_data : PackedStringArray = trigger_parts[1].split("|", false)
+
+				moves[trigger_coord] = []
+				for move_data : String in character_data:
+					moves[trigger_coord].append(int(move_data) as Character.Move)
+
 			_:
 				pass # TODO: Should do something with unimplemented.
 
@@ -50,7 +58,8 @@ func _init(
 func __get_cel_type(
 	p_coord : Vector2i,
 ) -> Space.Type:
-	return data[p_coord.y * Constant.BOARD_SIZE + p_coord.x]
+	return board[p_coord.y * Constant.BOARD_SIZE + p_coord.x]
+
 
 func __parse_coord(
 	p_coord_string : String,

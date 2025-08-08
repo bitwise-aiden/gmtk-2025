@@ -66,15 +66,15 @@ func _process(
 		return
 
 	if Input.is_action_just_pressed("right"):
-		__add_move(Move.right)
+		add_move(Move.right)
 	if Input.is_action_just_pressed("down"):
-		__add_move(Move.down)
+		add_move(Move.down)
 	if Input.is_action_just_pressed("left"):
-		__add_move(Move.left)
+		add_move(Move.left)
 	if Input.is_action_just_pressed("up"):
-		__add_move(Move.up)
+		add_move(Move.up)
 	if Input.is_action_just_pressed("noop"):
-		__add_move(Move.none)
+		add_move(Move.none)
 	if Input.is_action_just_pressed("undo"):
 		if __moves.size() > 0:
 			__moves.pop_back()
@@ -82,6 +82,15 @@ func _process(
 
 
 # Public methods
+
+func add_move(
+	p_move : Move,
+) -> void:
+	if __moves.size() >= __MOVES_MAX:
+		return
+
+	__moves.append(p_move)
+	__speech_bubble.update_moves(__moves)
 
 func direction(
 	move_index : int,
@@ -188,16 +197,6 @@ func tween_out(
 
 
 # Private methods
-
-func __add_move(
-	p_move : Move,
-) -> void:
-	if __moves.size() >= __MOVES_MAX:
-		return
-
-	__moves.append(p_move)
-	__speech_bubble.update_moves(__moves)
-
 
 func __mouse_interacted(
 	p_over : bool,

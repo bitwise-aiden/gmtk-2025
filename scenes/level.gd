@@ -191,14 +191,15 @@ func load_level(
 	if __current_level >= __levels.size():
 		return
 
-	var level_data : Array[Space.Type] = __levels[__current_level].data
+	var level : LevelData = __levels[__current_level]
 
+	var board : Array[Space.Type] = level.board
 	for x : int in Constant.BOARD_SIZE:
 		for y : int in Constant.BOARD_SIZE:
 			var coord : Vector2i = Vector2i(x, y)
 
 			var index : int = y * Constant.BOARD_SIZE + x
-			var type : Space.Type = level_data[index]
+			var type : Space.Type = board[index]
 
 			match type:
 				Space.Type.character:
@@ -209,16 +210,20 @@ func load_level(
 					__characters.append(character)
 
 					character.coord = coord
+
+					if level.moves.has(coord):
+						for move : Character.Move in level.moves[coord]:
+							character.add_move(move)
 				Space.Type.trapdoor:
 					__targets.append(coord)
 
 			__board.set_space_type(coord, type, __current_level)
 
-	var buttons : Dictionary[Vector2i, Array] = __levels[__current_level].buttons
+	var buttons : Dictionary[Vector2i, Array] = level.buttons
 	for trigger_coord : Vector2i in buttons:
 		__board.set_trigger(trigger_coord, buttons[trigger_coord])
 
-	for inverted_coord : Vector2i in __levels[__current_level].inverted:
+	for inverted_coord : Vector2i in level.inverted:
 		__board.set_inverted(inverted_coord)
 
 	__move_index = 0
