@@ -100,6 +100,12 @@ func is_occupied(
 	return __spaces[p_coord].occupied_by != null
 
 
+func set_enabled(
+	p_coord : Vector2i,
+) -> void:
+	__spaces[p_coord].enabled = true
+
+
 func set_inverted(
 	p_coord : Vector2i,
 ) -> void:

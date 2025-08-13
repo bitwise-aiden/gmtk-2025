@@ -5,7 +5,6 @@ class_name Space extends Entity
 
 signal activated(p_targets : Array)
 signal deactivated(p_targets : Array)
-signal spiked(p_character : Character)
 
 
 # Public enums
@@ -24,7 +23,7 @@ const __REGION_FLOOR_RATIOS : Array[Vector2i] = [
 	Vector2i(1, 1),
 ]
 const __REGION_WALL : Vector2i = Vector2i(0, 0)
-const __REGION_SPIKE : Array[Vector2i] = [Vector2i(4, 1), Vector2i(4, 0)]
+const __REGION_SPIKE : Array[Vector2i] = [Vector2i(4, 0), Vector2i(4, 1)]
 const __REGION_BUTTON_ACTIVATE : Array[Vector2i] = [Vector2i(0, 5), Vector2i(1, 5)]
 const __REGION_BUTTON_DEACTIVATE : Array[Vector2i] = [Vector2i(0, 4), Vector2i(1, 4)]
 const __REGION_GATE : Array[Vector2i] = [Vector2i(3, 1), Vector2i(2, 1)]
@@ -49,6 +48,9 @@ var enabled : bool :
 	set(p_value):
 		enabled = p_value
 		__update_texture()
+
+		if type == Type.spike && enabled && occupied_by:
+			occupied_by.spiked = true
 
 # button
 var inverted : bool :
@@ -100,7 +102,7 @@ func enter(
 	occupied_by = p_character
 
 	if type == Type.spike && enabled:
-		spiked.emit(p_character)
+		p_character.spiked = true
 
 	if type == Type.button:
 		enabled = true

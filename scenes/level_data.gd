@@ -6,6 +6,7 @@ class_name LevelData extends RefCounted
 var board : Array[Space.Type]
 var buttons : Dictionary[Vector2i, Array]
 var moves : Dictionary[Vector2i, Array]
+var enabled : Array[Vector2i]
 var inverted : Array[Vector2i]
 var best_instruction : int
 var best_move : int
@@ -39,6 +40,12 @@ func _init(
 				buttons[trigger_coord] = []
 				for target_data : String in button_data:
 					buttons[trigger_coord].append(__parse_coord(target_data))
+			Space.Type.gate:
+				var gate_data : PackedStringArray = trigger_parts[1].split("|", false)
+				var is_enabled : bool = bool(int(gate_data[0]))
+				if is_enabled:
+					enabled.append(trigger_coord)
+
 			Space.Type.character:
 				var character_data : PackedStringArray = trigger_parts[1].split("|", false)
 

@@ -22,14 +22,23 @@ const __MOVES_VECTOR : Array[Vector2i] = [
 static var id : int
 
 
-# Public variables
+# Pubic variables
 
-var code : String
+var spiked : bool :
+	set(p_value):
+		spiked = p_value
+
+		var animations : Array[String] = ["a_spiked", "b_spiked"]
+		__sprite.play(animations[__id % 2])
+
+		__sprite_back.visible = true
+		__sprite_back.play(animations[__id % 2])
 
 
 # Private variables
 
 @onready var __sprite : AnimatedSprite2D = $sprite
+@onready var __sprite_back : AnimatedSprite2D = $sprite/back
 @onready var __shadow : Sprite2D = $shadow
 @onready var __action : Sprite2D = $action
 
@@ -38,6 +47,8 @@ var __mouse_over : bool
 
 @onready var __speech_bubble : SpeechBubble = $speech_bubble
 var __moves : Array[Move]
+
+var __id : int
 
 
 # Lifecycle methods
@@ -52,9 +63,11 @@ func _ready() -> void:
 
 	__speech_bubble.update_moves(__moves)
 
-	var animations : Array[String] = ["a", "b"]
-	__sprite.play(animations[id % 2])
+	__id = id
 	id += 1
+
+	var animations : Array[String] = ["a", "b"]
+	__sprite.play(animations[__id % 2])
 
 
 func _process(
@@ -92,10 +105,11 @@ func add_move(
 	__moves.append(p_move)
 	__speech_bubble.update_moves(__moves)
 
+
 func direction(
 	move_index : int,
 ) -> Vector2i:
-	if __moves.is_empty():
+	if __moves.is_empty() || spiked:
 		return Vector2i.ZERO
 
 	var move : Move = __moves[move_index % __moves.size()]

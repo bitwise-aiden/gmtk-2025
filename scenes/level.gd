@@ -72,7 +72,7 @@ func _process(
 	if __home && __can_start && Input.is_anything_pressed():
 		__home = false
 		menu_sreen_hide()
-		load_level(4)
+		load_level(5)
 
 	if !__playing:
 		return
@@ -225,6 +225,9 @@ func load_level(
 
 	for inverted_coord : Vector2i in level.inverted:
 		__board.set_inverted(inverted_coord)
+
+	for enabled_coord : Vector2i in level.enabled:
+		__board.set_enabled(enabled_coord)
 
 	__move_index = 0
 
