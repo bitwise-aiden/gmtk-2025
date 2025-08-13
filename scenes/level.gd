@@ -72,7 +72,7 @@ func _process(
 	if __home && __can_start && Input.is_anything_pressed():
 		__home = false
 		menu_sreen_hide()
-		load_level(5)
+		load_level(0)
 
 	if !__playing:
 		return
