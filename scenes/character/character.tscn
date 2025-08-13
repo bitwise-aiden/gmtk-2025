@@ -477,11 +477,18 @@ offset = Vector2(0, -11)
 
 [node name="sprite" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_7p6qn")
-animation = &"a_spiked"
+animation = &"a"
 offset = Vector2(0, -16)
 
-[node name="back" type="AnimatedSprite2D" parent="sprite"]
+[node name="ded" type="AnimatedSprite2D" parent="."]
 visible = false
+position = Vector2(0, 16)
+sprite_frames = SubResource("SpriteFrames_7p6qn")
+animation = &"a_spiked"
+frame = 9
+offset = Vector2(0, -16)
+
+[node name="back" type="AnimatedSprite2D" parent="ded"]
 show_behind_parent = true
 sprite_frames = SubResource("SpriteFrames_f0y8k")
 animation = &"b_spiked"

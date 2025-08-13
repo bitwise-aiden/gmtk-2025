@@ -28,17 +28,19 @@ var spiked : bool :
 	set(p_value):
 		spiked = p_value
 
-		var animations : Array[String] = ["a_spiked", "b_spiked"]
-		__sprite.play(animations[__id % 2])
+		__sprite.visible = false
+		__ded.visible = true
 
-		__sprite_back.visible = true
-		__sprite_back.play(animations[__id % 2])
+		var animations : Array[String] = ["a_spiked", "b_spiked"]
+		__ded.play(animations[__id % 2])
+		__ded_back.play(animations[__id % 2])
 
 
 # Private variables
 
 @onready var __sprite : AnimatedSprite2D = $sprite
-@onready var __sprite_back : AnimatedSprite2D = $sprite/back
+@onready var __ded : AnimatedSprite2D = $ded
+@onready var __ded_back : AnimatedSprite2D = $"ded/back"
 @onready var __shadow : Sprite2D = $shadow
 @onready var __action : Sprite2D = $action
 
